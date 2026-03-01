@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chest X-Ray Diagnosis</title>
+</head>
+<body>
+    <h2>AI-Powered Pneumonia Detection</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" required>
+        <button type="submit">Analyze</button>
+    </form>
+
+    {% if result %}
+    <h3>Prediction: {{ result }}</h3>
+    <h4>Confidence: {{ "%.2f"|format(confidence * 100) }}%</h4>
+    <img src="{{ url_for('static', filename=filename) }}" width="300">
+{% endif %}
+
+</body>
+</html>
