@@ -1,21 +1,118 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chest X-Ray Diagnosis</title>
+    <title>AI Pneumonia Detection</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(to right, #e6f0ff, #ffffff);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 60px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #0d47a1;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        input[type="file"] {
+            margin-bottom: 15px;
+        }
+
+        button {
+            background-color: #1565c0;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #0d47a1;
+        }
+
+        .result-box {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f1f8ff;
+        }
+
+        .prediction {
+            font-size: 22px;
+            font-weight: bold;
+            color: #0d47a1;
+        }
+
+        .confidence {
+            margin-top: 8px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        img {
+            margin-top: 15px;
+            border-radius: 10px;
+            max-width: 100%;
+        }
+
+        footer {
+            margin-top: 40px;
+            font-size: 13px;
+            color: #777;
+        }
+    </style>
 </head>
+
 <body>
-    <h2>AI-Powered Pneumonia Detection</h2>
 
-    <form method="POST" enctype="multipart/form-data">
-        <input type="file" name="file" required>
-        <button type="submit">Analyze</button>
-    </form>
+    <div class="container">
+        <h1>AI-Powered Pneumonia Detection</h1>
+        <p>Upload a Chest X-Ray image to analyze for Pneumonia</p>
 
-    {% if result %}
-    <h3>Prediction: {{ result }}</h3>
-    <h4>Confidence: {{ "%.2f"|format(confidence * 100) }}%</h4>
-    <img src="{{ url_for('static', filename=filename) }}" width="300">
-{% endif %}
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" required>
+            <br>
+            <button type="submit">Analyze Image</button>
+        </form>
+
+        {% if result %}
+        <div class="result-box">
+            <div class="prediction">
+                Prediction: {{ result }}
+            </div>
+            <div class="confidence">
+                Confidence: {{ "%.2f"|format(confidence * 100) }}%
+            </div>
+
+            <img src="{{ url_for('static', filename=filename) }}">
+        </div>
+        {% endif %}
+
+        <footer>
+            This AI tool is for educational purposes only and not a medical diagnosis.
+        </footer>
+    </div>
 
 </body>
 </html>
