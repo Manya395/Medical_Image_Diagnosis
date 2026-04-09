@@ -1,118 +1,383 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>AI Pneumonia Detection</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>EasyScan - Clinical AI Assistant</title>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: linear-gradient(to right, #e6f0ff, #ffffff);
-        }
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, sans-serif;
+}
 
-        .container {
-            width: 100%;
-            max-width: 600px;
-            margin: 60px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
+body{
+background:#eef4fb;
+color:#1f2d3d;
+}
 
-        h1 {
-            color: #0d47a1;
-            margin-bottom: 10px;
-        }
+/* HEADER */
+header{
+height:80px;
+background:white;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 30px;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
 
-        p {
-            color: #555;
-            margin-bottom: 25px;
-        }
+.logo{
+display:flex;
+align-items:center;
+gap:15px;
+}
 
-        input[type="file"] {
-            margin-bottom: 15px;
-        }
+.logo-icon{
+width:48px;
+height:48px;
+background:#2563eb;
+border-radius:12px;
+display:flex;
+align-items:center;
+justify-content:center;
+color:white;
+font-size:24px;
+font-weight:bold;
+}
 
-        button {
-            background-color: #1565c0;
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            font-size: 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+.logo-text h1{
+font-size:30px;
+color:#1e3a8a;
+}
 
-        button:hover {
-            background-color: #0d47a1;
-        }
+.logo-text p{
+font-size:14px;
+color:#64748b;
+}
 
-        .result-box {
-            margin-top: 25px;
-            padding: 20px;
-            border-radius: 10px;
-            background-color: #f1f8ff;
-        }
+.new-btn{
+background:#eff6ff;
+border:none;
+padding:12px 20px;
+border-radius:12px;
+color:#2563eb;
+font-weight:bold;
+cursor:pointer;
+font-size:15px;
+}
 
-        .prediction {
-            font-size: 22px;
-            font-weight: bold;
-            color: #0d47a1;
-        }
+/* MAIN CARD */
+.main-container{
+max-width:1000px;
+margin:40px auto;
+background:white;
+border-radius:20px;
+overflow:hidden;
+box-shadow:0 12px 30px rgba(0,0,0,0.06);
+}
 
-        .confidence {
-            margin-top: 8px;
-            font-size: 16px;
-            color: #333;
-        }
+.card-header{
+padding:30px;
+border-bottom:1px solid #e5e7eb;
+background:#f8fbff;
+}
 
-        img {
-            margin-top: 15px;
-            border-radius: 10px;
-            max-width: 100%;
-        }
+.card-header h2{
+font-size:32px;
+color:#1e3a8a;
+margin-bottom:8px;
+}
 
-        footer {
-            margin-top: 40px;
-            font-size: 13px;
-            color: #777;
-        }
-    </style>
+.card-header p{
+color:#64748b;
+font-size:16px;
+}
+
+.content{
+display:flex;
+gap:30px;
+padding:35px;
+flex-wrap:wrap;
+}
+
+/* LEFT */
+.left-panel{
+flex:1;
+min-width:320px;
+}
+
+.right-panel{
+flex:1;
+min-width:320px;
+}
+
+.section-title{
+font-size:24px;
+font-weight:bold;
+margin-bottom:20px;
+color:#64748b;
+}
+
+/* UPLOAD BOX */
+.upload-box{
+border:2px dashed #cbd5e1;
+border-radius:18px;
+height:350px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+cursor:pointer;
+background:#f9fbff;
+transition:0.3s;
+text-align:center;
+overflow:hidden;
+padding:20px;
+}
+
+.upload-box:hover{
+background:#f1f7ff;
+border-color:#2563eb;
+}
+
+.upload-box input{
+display:none;
+}
+
+.upload-icon{
+font-size:50px;
+color:#2563eb;
+margin-bottom:15px;
+}
+
+.upload-text{
+font-size:28px;
+font-weight:bold;
+margin-bottom:10px;
+}
+
+.upload-sub{
+color:#64748b;
+font-size:18px;
+}
+
+/* Preview image */
+.preview-image{
+max-width:100%;
+max-height:250px;
+border-radius:12px;
+display:none;
+box-shadow:0 6px 12px rgba(0,0,0,0.08);
+}
+
+/* BUTTON */
+.analyze-btn{
+margin-top:25px;
+width:100%;
+padding:18px;
+border:none;
+border-radius:16px;
+font-size:22px;
+font-weight:bold;
+background:#2563eb;
+color:white;
+cursor:pointer;
+transition:0.3s;
+}
+
+.analyze-btn:hover{
+background:#1d4ed8;
+}
+
+/* RESULT PANEL */
+.result-box{
+height:430px;
+background:#f9fbff;
+border-radius:18px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+padding:20px;
+border:1px solid #e5e7eb;
+}
+
+.awaiting{
+color:#94a3b8;
+font-size:24px;
+}
+
+.result-title{
+font-size:30px;
+font-weight:bold;
+margin-bottom:15px;
+}
+
+.prediction{
+font-size:38px;
+font-weight:bold;
+margin-bottom:15px;
+}
+
+.normal{
+color:#16a34a;
+}
+
+.pneumonia{
+color:#dc2626;
+}
+
+.confidence{
+font-size:24px;
+color:#475569;
+margin-bottom:20px;
+}
+
+.result-img{
+max-width:100%;
+max-height:220px;
+border-radius:15px;
+box-shadow:0 6px 12px rgba(0,0,0,0.08);
+}
+
+/* DISCLAIMER */
+.disclaimer{
+background:#fff7ed;
+padding:22px 30px;
+font-size:18px;
+color:#9a3412;
+line-height:1.6;
+border-top:1px solid #fdba74;
+}
+
+.disclaimer strong{
+color:#c2410c;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+.content{
+flex-direction:column;
+}
+}
+</style>
 </head>
-
 <body>
 
-    <div class="container">
-        <h1>AI-Powered Pneumonia Detection</h1>
-        <p>Upload a Chest X-Ray image to analyze for Pneumonia</p>
+<header>
+<div class="logo">
+<div class="logo-icon">+</div>
+<div class="logo-text">
+<h1>EasyScan</h1>
+<p>Clinical AI Assistant</p>
+</div>
+</div>
 
-        <form method="POST" enctype="multipart/form-data">
-            <input type="file" name="file" required>
-            <br>
-            <button type="submit">Analyze Image</button>
-        </form>
+<button class="new-btn" onclick="window.location.href='/'">
+↻ Start New Patient
+</button>
+</header>
 
-        {% if result %}
-        <div class="result-box">
-            <div class="prediction">
-                Prediction: {{ result }}
-            </div>
-            <div class="confidence">
-                Confidence: {{ "%.2f"|format(confidence * 100) }}%
-            </div>
+<div class="main-container">
 
-            <img src="{{ url_for('static', filename=filename) }}">
-        </div>
-        {% endif %}
+<div class="card-header">
+<h2>Chest X-Ray AI Analysis</h2>
+<p>Secure Neural Network Diagnostic Channel</p>
+</div>
 
-        <footer>
-            This AI tool is for educational purposes only and not a medical diagnosis.
-        </footer>
-    </div>
+<div class="content">
+
+<!-- LEFT PANEL -->
+<div class="left-panel">
+<div class="section-title">1. PATIENT SCAN</div>
+
+<form method="POST" enctype="multipart/form-data">
+
+<label class="upload-box" id="uploadLabel">
+
+<div id="uploadContent">
+<div class="upload-icon">⬆</div>
+<div class="upload-text">Upload Scan Image</div>
+<div class="upload-sub">Supports JPG, PNG formats</div>
+</div>
+
+<img id="previewImage" class="preview-image">
+
+<input type="file" name="file" id="fileInput" accept="image/*" required>
+
+</label>
+
+<button type="submit" class="analyze-btn">
+Analyze Scan
+</button>
+
+</form>
+</div>
+
+<!-- RIGHT PANEL -->
+<div class="right-panel">
+<div class="section-title">2. AI DIAGNOSIS</div>
+
+<div class="result-box">
+
+{% if result %}
+<div class="result-title">Diagnosis Complete</div>
+
+<div class="prediction 
+{% if result == 'PNEUMONIA' %}pneumonia{% else %}normal{% endif %}">
+{{ result }}
+</div>
+
+<div class="confidence">
+Confidence: {{ "%.2f"|format(confidence * 100) }}%
+</div>
+
+<img src="{{ url_for('static', filename=filename) }}" class="result-img">
+
+{% else %}
+<div class="awaiting">
+Awaiting scan image...
+</div>
+{% endif %}
+
+</div>
+</div>
+
+</div>
+
+<div class="disclaimer">
+<strong>Disclaimer:</strong> This result is AI-generated and serves only as an informational screening tool.
+The neural network predictions are not 100% accurate.
+<strong>You must consult a licensed medical doctor for formal diagnosis and treatment.</strong>
+</div>
+
+</div>
+
+<script>
+const fileInput = document.getElementById("fileInput");
+const previewImage = document.getElementById("previewImage");
+const uploadContent = document.getElementById("uploadContent");
+
+fileInput.addEventListener("change", function () {
+    const file = this.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            previewImage.src = e.target.result;
+            previewImage.style.display = "block";
+            uploadContent.style.display = "none";
+        };
+
+        reader.readAsDataURL(file);
+    }
+});
+</script>
 
 </body>
 </html>
