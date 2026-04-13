@@ -1,6 +1,32 @@
+# Virtual Environment
 venv/
+
+# Python cache
 __pycache__/
 *.pyc
+
+# Dataset (large files)
 data/
+
+# Trained models (large files)
 models/*.h5
-app/static/
+
+# Uploaded images only (not whole static)
+app/static/*.jpg
+app/static/*.jpeg
+app/static/*.png
+
+# Environment variables (IMPORTANT)
+.env
+
+# VS Code settings
+.vscode/
+
+# Mac system files
+.DS_Store
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp

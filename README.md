@@ -46,5 +46,7 @@ python -m src.evaluate
 //module to run frontend
 pip install flask
 
+ pip install flask pymongo flask-bcrypt
+
 //command to run the frontend
 python app/app.py

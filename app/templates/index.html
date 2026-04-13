@@ -3,381 +3,54 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>EasyScan - Clinical AI Assistant</title>
-
+<title>EasyScan - Clinical Dashboard</title>
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, sans-serif;
-}
-
-body{
-background:#eef4fb;
-color:#1f2d3d;
-}
-
-/* HEADER */
-header{
-height:80px;
-background:white;
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:0 30px;
-box-shadow:0 2px 8px rgba(0,0,0,0.05);
-}
-
-.logo{
-display:flex;
-align-items:center;
-gap:15px;
-}
-
-.logo-icon{
-width:48px;
-height:48px;
-background:#2563eb;
-border-radius:12px;
-display:flex;
-align-items:center;
-justify-content:center;
-color:white;
-font-size:24px;
-font-weight:bold;
-}
-
-.logo-text h1{
-font-size:30px;
-color:#1e3a8a;
-}
-
-.logo-text p{
-font-size:14px;
-color:#64748b;
-}
-
-.new-btn{
-background:#eff6ff;
-border:none;
-padding:12px 20px;
-border-radius:12px;
-color:#2563eb;
-font-weight:bold;
-cursor:pointer;
-font-size:15px;
-}
-
-/* MAIN CARD */
-.main-container{
-max-width:1000px;
-margin:40px auto;
-background:white;
-border-radius:20px;
-overflow:hidden;
-box-shadow:0 12px 30px rgba(0,0,0,0.06);
-}
-
-.card-header{
-padding:30px;
-border-bottom:1px solid #e5e7eb;
-background:#f8fbff;
-}
-
-.card-header h2{
-font-size:32px;
-color:#1e3a8a;
-margin-bottom:8px;
-}
-
-.card-header p{
-color:#64748b;
-font-size:16px;
-}
-
-.content{
-display:flex;
-gap:30px;
-padding:35px;
-flex-wrap:wrap;
-}
-
-/* LEFT */
-.left-panel{
-flex:1;
-min-width:320px;
-}
-
-.right-panel{
-flex:1;
-min-width:320px;
-}
-
-.section-title{
-font-size:24px;
-font-weight:bold;
-margin-bottom:20px;
-color:#64748b;
-}
-
-/* UPLOAD BOX */
-.upload-box{
-border:2px dashed #cbd5e1;
-border-radius:18px;
-height:350px;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-cursor:pointer;
-background:#f9fbff;
-transition:0.3s;
-text-align:center;
-overflow:hidden;
-padding:20px;
-}
-
-.upload-box:hover{
-background:#f1f7ff;
-border-color:#2563eb;
-}
-
-.upload-box input{
-display:none;
-}
-
-.upload-icon{
-font-size:50px;
-color:#2563eb;
-margin-bottom:15px;
-}
-
-.upload-text{
-font-size:28px;
-font-weight:bold;
-margin-bottom:10px;
-}
-
-.upload-sub{
-color:#64748b;
-font-size:18px;
-}
-
-/* Preview image */
-.preview-image{
-max-width:100%;
-max-height:250px;
-border-radius:12px;
-display:none;
-box-shadow:0 6px 12px rgba(0,0,0,0.08);
-}
-
-/* BUTTON */
-.analyze-btn{
-margin-top:25px;
-width:100%;
-padding:18px;
-border:none;
-border-radius:16px;
-font-size:22px;
-font-weight:bold;
-background:#2563eb;
-color:white;
-cursor:pointer;
-transition:0.3s;
-}
-
-.analyze-btn:hover{
-background:#1d4ed8;
-}
-
-/* RESULT PANEL */
-.result-box{
-height:430px;
-background:#f9fbff;
-border-radius:18px;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-text-align:center;
-padding:20px;
-border:1px solid #e5e7eb;
-}
-
-.awaiting{
-color:#94a3b8;
-font-size:24px;
-}
-
-.result-title{
-font-size:30px;
-font-weight:bold;
-margin-bottom:15px;
-}
-
-.prediction{
-font-size:38px;
-font-weight:bold;
-margin-bottom:15px;
-}
-
-.normal{
-color:#16a34a;
-}
-
-.pneumonia{
-color:#dc2626;
-}
-
-.confidence{
-font-size:24px;
-color:#475569;
-margin-bottom:20px;
-}
-
-.result-img{
-max-width:100%;
-max-height:220px;
-border-radius:15px;
-box-shadow:0 6px 12px rgba(0,0,0,0.08);
-}
-
-/* DISCLAIMER */
-.disclaimer{
-background:#fff7ed;
-padding:22px 30px;
-font-size:18px;
-color:#9a3412;
-line-height:1.6;
-border-top:1px solid #fdba74;
-}
-
-.disclaimer strong{
-color:#c2410c;
-}
-
-/* MOBILE */
-@media(max-width:768px){
-.content{
-flex-direction:column;
-}
-}
+*{ margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; }
+body{ background:#eef4fb; min-height:100vh; display:flex; justify-content:center; align-items:center; padding: 20px; }
+.container{ width:500px; background:white; border-radius:20px; box-shadow:0 12px 30px rgba(0,0,0,0.08); overflow:hidden; }
+.header{ background:#f8fbff; padding:30px; text-align:center; border-bottom:1px solid #e5e7eb; }
+.logo-icon{ width:60px; height:60px; background:#2563eb; border-radius:16px; display:flex; justify-content:center; align-items:center; color:white; font-size:28px; font-weight:bold; margin:0 auto 15px auto; }
+.header h1{ font-size:26px; color:#1e3a8a; }
+.body{ padding:35px; text-align: center; }
+.upload-box{ border: 2px dashed #cbd5e1; padding: 30px; border-radius: 12px; margin-bottom: 20px; }
+.btn{ width:100%; padding:15px; background:#2563eb; color:white; font-size:18px; font-weight:bold; border:none; border-radius:14px; cursor:pointer; transition:0.3s; margin-top: 10px; }
+.btn:hover{ background:#1d4ed8; }
+.result-box{ margin-top: 25px; padding: 20px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; }
+.result-box h2 { color: #166534; margin-bottom: 5px; }
+.links{ margin-top:20px; display: flex; justify-content: space-between; }
+.links a{ text-decoration:none; color:#2563eb; font-weight:bold; font-size: 14px; }
 </style>
 </head>
 <body>
+<div class="container">
+    <div class="header">
+        <div class="logo-icon">+</div>
+        <h1>EasyScan AI</h1>
+        <p>Welcome, {{ user }}</p>
+    </div>
+    <div class="body">
+        <form method="POST" enctype="multipart/form-data">
+            <div class="upload-box">
+                <input type="file" name="file" accept="image/*" required>
+            </div>
+            <button type="submit" class="btn">Analyze Scan</button>
+        </form>
 
-<header>
-<div class="logo">
-<div class="logo-icon">+</div>
-<div class="logo-text">
-<h1>EasyScan</h1>
-<p>Clinical AI Assistant</p>
+        {% if result %}
+        <div class="result-box">
+            <h2>{{ result }}</h2>
+            <p>Confidence Score: {{ (confidence * 100)|round(2) }}%</p>
+            {% if uploaded_image %}
+            <img src="{{ url_for('static', filename=uploaded_image) }}" style="width: 100%; border-radius: 10px; margin-top: 15px;">
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <div class="links">
+            <a href="/profile">View Profile History</a>
+            <a href="/logout" style="color: #dc2626;">Logout</a>
+        </div>
+    </div>
 </div>
-</div>
-
-<button class="new-btn" onclick="window.location.href='/'">
-↻ Start New Patient
-</button>
-</header>
-
-<div class="main-container">
-
-<div class="card-header">
-<h2>Chest X-Ray AI Analysis</h2>
-<p>Secure Neural Network Diagnostic Channel</p>
-</div>
-
-<div class="content">
-
-<!-- LEFT PANEL -->
-<div class="left-panel">
-<div class="section-title">1. PATIENT SCAN</div>
-
-<form method="POST" enctype="multipart/form-data">
-
-<label class="upload-box" id="uploadLabel">
-
-<div id="uploadContent">
-<div class="upload-icon">⬆</div>
-<div class="upload-text">Upload Scan Image</div>
-<div class="upload-sub">Supports JPG, PNG formats</div>
-</div>
-
-<img id="previewImage" class="preview-image">
-
-<input type="file" name="file" id="fileInput" accept="image/*" required>
-
-</label>
-
-<button type="submit" class="analyze-btn">
-Analyze Scan
-</button>
-
-</form>
-</div>
-
-<!-- RIGHT PANEL -->
-<div class="right-panel">
-<div class="section-title">2. AI DIAGNOSIS</div>
-
-<div class="result-box">
-
-{% if result %}
-<div class="result-title">Diagnosis Complete</div>
-
-<div class="prediction 
-{% if result == 'PNEUMONIA' %}pneumonia{% else %}normal{% endif %}">
-{{ result }}
-</div>
-
-<div class="confidence">
-Confidence: {{ "%.2f"|format(confidence * 100) }}%
-</div>
-
-<img src="{{ url_for('static', filename=filename) }}" class="result-img">
-
-{% else %}
-<div class="awaiting">
-Awaiting scan image...
-</div>
-{% endif %}
-
-</div>
-</div>
-
-</div>
-
-<div class="disclaimer">
-<strong>Disclaimer:</strong> This result is AI-generated and serves only as an informational screening tool.
-The neural network predictions are not 100% accurate.
-<strong>You must consult a licensed medical doctor for formal diagnosis and treatment.</strong>
-</div>
-
-</div>
-
-<script>
-const fileInput = document.getElementById("fileInput");
-const previewImage = document.getElementById("previewImage");
-const uploadContent = document.getElementById("uploadContent");
-
-fileInput.addEventListener("change", function () {
-    const file = this.files[0];
-
-    if (file) {
-        const reader = new FileReader();
-
-        reader.onload = function(e) {
-            previewImage.src = e.target.result;
-            previewImage.style.display = "block";
-            uploadContent.style.display = "none";
-        };
-
-        reader.readAsDataURL(file);
-    }
-});
-</script>
-
 </body>
 </html>

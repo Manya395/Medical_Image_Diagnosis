@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>User Profile</title>
+<style>
+body{
+background:#eef4fb;
+font-family:Arial,sans-serif;
+padding:40px;
+margin:0;
+}
+.container{
+max-width:800px;
+margin:auto;
+background:white;
+border-radius:20px;
+box-shadow:0 12px 30px rgba(0,0,0,0.08);
+overflow:hidden;
+}
+.header{
+background:#f8fbff;
+padding:30px;
+text-align:center;
+border-bottom:1px solid #e5e7eb;
+}
+.header h1{
+color:#1e3a8a;
+}
+.content{
+padding:35px;
+}
+.info{
+margin-bottom:30px;
+font-size:18px;
+}
+h3{
+color:#2563eb;
+margin-bottom:15px;
+}
+ul{
+padding-left:20px;
+}
+li{
+margin-bottom:10px;
+}
+a{
+display:inline-block;
+margin-top:25px;
+text-decoration:none;
+background:#2563eb;
+color:white;
+padding:12px 20px;
+border-radius:12px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1>{{ user.name }} Profile</h1>
+<p>EasyScan Medical Dashboard</p>
+</div>
+<div class="content">
+
+<div class="info">
+<p><strong>Name:</strong> {{ user.name }}</p>
+<p><strong>Email:</strong> {{ user.email }}</p>
+</div>
+
+<h3>Scan History</h3>
+<ul>
+{% for scan in user.scan_history %}
+<li>{{ scan.filename }} — {{ scan.result }} — {{ scan.confidence }}%</li>
+{% else %}
+<li>No scans yet.</li>
+{% endfor %}
+</ul>
+
+<h3>Chat History</h3>
+<ul>
+{% for chat in user.chat_history %}
+<li>{{ chat }}</li>
+{% else %}
+<li>No chat history yet.</li>
+{% endfor %}
+</ul>
+
+<a href="/">← Back to Dashboard</a>
+<a href="/logout">Logout</a>
+
+</div>
+</div>
+</body>
+</html>
