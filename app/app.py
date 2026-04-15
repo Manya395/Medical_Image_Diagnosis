@@ -6,21 +6,26 @@ from tensorflow.keras.preprocessing import image
 import numpy as np
 import os
 from datetime import timedelta
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # ---------------- APP CONFIG ----------------
 app = Flask(__name__)
-app.secret_key = "super_secure_manya_key"
+
+# Use secret key from .env (SAFE)
+app.secret_key = os.getenv("FLASK_SECRET", "fallback_secret_key")
+
+# Session timeout
 app.permanent_session_lifetime = timedelta(minutes=30)
 
 bcrypt = Bcrypt(app)
 
 # ---------------- MONGODB ----------------
-client = MongoClient(
-    "mongodb+srv://Medical_image_diag:Manya12345@cluster0.arsp9te.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-)
+client = MongoClient(os.getenv("MONGO_URI"))
 db = client["medical_ai_db"]
 users_collection = db["users"]
-
 # ---------------- LOAD MODEL ----------------
 MODEL_PATH = os.path.join(os.path.dirname(__file__), "..", "models", "best_model.h5")
 try:
