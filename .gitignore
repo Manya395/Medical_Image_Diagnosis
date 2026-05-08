@@ -1,32 +1,124 @@
-# Virtual Environment
-venv/
-
-# Python cache
+# ── Python ────────────────────────────────────
 __pycache__/
+*.py[cod]
+*.pyo
+*.pyd
 *.pyc
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+wheels/
+*.whl
+.Python
 
-# Dataset (large files)
-data/
+# ── Virtual Environment ───────────────────────
+venv/
+env/
+.env/
+.venv/
+ENV/
+env.bak/
+venv.bak/
 
-# Trained models (large files)
-models/*.h5
+# ── Environment Variables ─────────────────────
+.env
+.env.local
+.env.production
+.env.*
+!.env.example
 
-# Uploaded images only (not whole static)
+# ── Flask ─────────────────────────────────────
+instance/
+.webassets-cache
+flask_session/
+
+# ── MongoDB ───────────────────────────────────
+*.mongodb
+mongod.lock
+mongo_data/
+
+# ── ML Models (large files) ───────────────────
+*.h5
+*.hdf5
+*.pkl
+*.pickle
+*.pt
+*.pth
+*.onnx
+*.pb
+*.tflite
+models/
+checkpoints/
+saved_models/
+
+# ── Uploaded / Output files ───────────────────
 app/static/*.jpg
 app/static/*.jpeg
 app/static/*.png
+app/static/*.gif
+app/static/*.bmp
+outputs/
+uploads/
 
-# Environment variables (IMPORTANT)
-.env
+# ── Jupyter Notebooks ─────────────────────────
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+notebooks/.ipynb_checkpoints/
 
-# VS Code settings
-.vscode/
+# ── Data files ────────────────────────────────
+data/
+datasets/
+*.csv
+*.tsv
+*.json
+!package.json
+*.xml
+*.npy
+*.npz
 
-# Mac system files
+# ── OS files ──────────────────────────────────
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
 
-# Logs
+# ── IDE / Editor ──────────────────────────────
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+.project
+.classpath
+
+# ── Logs ──────────────────────────────────────
 *.log
+logs/
+log/
+pip-log.txt
+pip-delete-this-directory.txt
 
-# Temporary files
-*.tmp
+# ── Testing ───────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+
+# ── Secrets / Keys ────────────────────────────
+*.pem
+*.key
+*.cert
+*.crt
+secrets.py
+config_secret.py

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dr. {{ doctor.name }} — EasyScan AI</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #eef5ff; min-height: 100vh; }
+.navbar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 40px; background: white;
+    box-shadow: 0px 2px 10px rgba(0,0,0,0.05);
+}
+.logo { font-size: 22px; font-weight: bold; color: #1565c0; }
+.nav-right a { margin-left: 20px; text-decoration: none; font-weight: bold; color: #1565c0; }
+.nav-logout { color: red !important; }
+
+.container { max-width: 900px; margin: 30px auto; padding: 0 20px 60px; }
+
+/* PROFILE HERO */
+.profile-hero {
+    background: white; border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    overflow: hidden; margin-bottom: 24px;
+}
+.hero-banner {
+    height: 100px;
+    background: linear-gradient(135deg, #1565c0, #26a69a);
+}
+.hero-body { padding: 0 30px 28px; }
+.hero-top { display: flex; align-items: flex-end; gap: 20px; margin-top: -36px; margin-bottom: 16px; }
+.avatar-large {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: white; border: 4px solid white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 38px; flex-shrink: 0;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+}
+.hero-name-block { padding-bottom: 4px; }
+.hero-name { font-size: 24px; font-weight: bold; color: #1a1a2e; }
+.hero-spec { font-size: 14px; color: #00897b; font-weight: 600; margin-top: 3px; }
+
+.hero-meta { display: flex; flex-wrap: wrap; gap: 16px; }
+.meta-item { display: flex; align-items: center; gap: 6px; font-size: 14px; color: #555; }
+.avail-badge {
+    padding: 5px 14px; border-radius: 20px; font-size: 13px; font-weight: bold;
+    display: inline-block; margin-top: 10px;
+}
+.available { background: #e8f5e9; color: #2e7d32; }
+.unavailable { background: #fce4ec; color: #c62828; }
+
+/* STARS */
+.stars-row { display: flex; align-items: center; gap: 4px; margin: 12px 0; }
+.star { color: #ffc107; font-size: 20px; }
+.star.empty { color: #e0e0e0; }
+.rating-num { font-size: 22px; font-weight: bold; color: #333; }
+.rating-count { font-size: 13px; color: #888; }
+
+/* GRID */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media(max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+
+.info-card {
+    background: white; border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+    padding: 22px 24px;
+}
+.info-card h3 {
+    font-size: 14px; font-weight: bold; text-transform: uppercase;
+    letter-spacing: 0.8px; color: #1565c0; margin-bottom: 16px;
+    padding-bottom: 10px; border-bottom: 2px solid #eef5ff;
+}
+.detail-row { display: flex; gap: 10px; margin-bottom: 12px; font-size: 14px; color: #444; align-items: flex-start; }
+.detail-icon { font-size: 18px; flex-shrink: 0; }
+
+/* BOOKING CARD */
+.booking-card {
+    background: white; border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+    padding: 24px; margin-top: 20px;
+}
+.booking-card h3 {
+    font-size: 18px; color: #1565c0; margin-bottom: 20px;
+    padding-bottom: 12px; border-bottom: 2px solid #eef5ff;
+}
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 13px; font-weight: bold; color: #555; margin-bottom: 6px; }
+.form-control {
+    width: 100%; padding: 11px 14px; border: 2px solid #e0e0e0;
+    border-radius: 10px; font-size: 14px; outline: none;
+    transition: border-color 0.2s;
+}
+.form-control:focus { border-color: #1565c0; }
+.time-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.time-slot {
+    padding: 9px; text-align: center; border: 2px solid #e0e0e0;
+    border-radius: 8px; font-size: 13px; cursor: pointer;
+    transition: all 0.15s; background: white; color: #555;
+}
+.time-slot:hover { border-color: #1565c0; color: #1565c0; background: #eef5ff; }
+.time-slot.selected { border-color: #1565c0; background: #1565c0; color: white; }
+.time-slot.disabled { background: #f5f5f5; color: #bbb; cursor: not-allowed; border-color: #eee; }
+
+.book-btn {
+    width: 100%; padding: 14px; background: #1565c0; color: white;
+    border: none; border-radius: 12px; font-size: 16px; font-weight: bold;
+    cursor: pointer; margin-top: 8px; transition: background 0.2s;
+}
+.book-btn:hover { background: #0d47a1; }
+.book-btn:disabled { background: #90a4ae; cursor: not-allowed; }
+
+/* RATING SECTION */
+.rate-section { margin-top: 20px; }
+.rate-stars { display: flex; gap: 8px; font-size: 32px; cursor: pointer; margin: 12px 0; }
+.rate-star { color: #ddd; transition: color 0.1s; }
+.rate-star.lit { color: #ffc107; }
+.rate-btn {
+    padding: 10px 28px; background: #00897b; color: white;
+    border: none; border-radius: 10px; font-size: 14px;
+    font-weight: bold; cursor: pointer;
+}
+
+/* TOAST */
+.toast {
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+    background: #1a1a2e; color: white; padding: 14px 28px;
+    border-radius: 12px; font-size: 15px; z-index: 9999;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    opacity: 0; transition: opacity 0.3s; pointer-events: none;
+}
+.toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div class="navbar">
+    <div class="logo">EasyScan AI</div>
+    <div class="nav-right">
+        <a href="/nearby_doctors">← Back to Doctors</a>
+        <a href="/profile">Profile</a>
+        <a href="/logout" class="nav-logout">Logout</a>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- PROFILE HERO -->
+    <div class="profile-hero">
+        <div class="hero-banner"></div>
+        <div class="hero-body">
+            <div class="hero-top">
+                <div class="avatar-large">👨‍⚕️</div>
+                <div class="hero-name-block">
+                    <div class="hero-name">Dr. {{ doctor.name }}</div>
+                    <div class="hero-spec">{{ doctor.specialization }}</div>
+                </div>
+            </div>
+
+            <div class="stars-row">
+                <span class="rating-num">{{ doctor.rating }}</span>
+                {% for i in range(1, 6) %}
+                    <span class="star {% if i > doctor.rating|round %}empty{% endif %}">★</span>
+                {% endfor %}
+                <span class="rating-count">({{ doctor.total_ratings }} reviews)</span>
+            </div>
+
+            <span class="avail-badge {% if doctor.available %}available{% else %}unavailable{% endif %}">
+                {% if doctor.available %}✓ Currently Available{% else %}Currently Unavailable{% endif %}
+            </span>
+
+            <div class="hero-meta" style="margin-top:14px;">
+                <div class="meta-item">🏥 {{ doctor.clinic }}</div>
+                <div class="meta-item">📍 {{ doctor.address }}, {{ doctor.city|capitalize }}</div>
+                <div class="meta-item">📞 {{ doctor.phone }}</div>
+                {% if doctor.experience %}
+                <div class="meta-item">🩺 {{ doctor.experience }} experience</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="two-col">
+        <!-- CLINIC INFO -->
+        <div class="info-card">
+            <h3>🏥 Clinic Details</h3>
+            <div class="detail-row"><span class="detail-icon">🏥</span><span>{{ doctor.clinic }}</span></div>
+            <div class="detail-row"><span class="detail-icon">📍</span><span>{{ doctor.address }}</span></div>
+            <div class="detail-row"><span class="detail-icon">🌆</span><span>{{ doctor.city|capitalize }}</span></div>
+            <div class="detail-row"><span class="detail-icon">📞</span><span>{{ doctor.phone }}</span></div>
+        </div>
+
+        <!-- RATE DOCTOR - only after completed appointment -->
+        <div class="info-card">
+            <h3>⭐ Rate This Doctor</h3>
+            {% if can_rate %}
+                <p style="font-size:13px;color:#2e7d32;margin-bottom:8px;">✅ You visited this doctor. Share your experience!</p>
+                <div class="rate-stars" id="rateStars">
+                    <span class="rate-star" data-v="1">★</span>
+                    <span class="rate-star" data-v="2">★</span>
+                    <span class="rate-star" data-v="3">★</span>
+                    <span class="rate-star" data-v="4">★</span>
+                    <span class="rate-star" data-v="5">★</span>
+                </div>
+                <button class="rate-btn" onclick="submitRating()">Submit Rating</button>
+            {% elif already_rated %}
+                <div style="text-align:center;padding:16px 0;">
+                    <div style="font-size:32px;">⭐</div>
+                    <p style="font-size:14px;color:#555;margin-top:8px;">You have already rated this doctor.</p>
+                </div>
+            {% else %}
+                <div style="text-align:center;padding:16px 0;">
+                    <div style="font-size:32px;">🔒</div>
+                    <p style="font-size:14px;color:#888;margin-top:8px;">Rating is available only after a <strong>completed</strong> appointment with this doctor.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- BOOKING CARD -->
+    <div class="booking-card">
+        <h3>📅 Book an Appointment</h3>
+
+        {% if not doctor.available %}
+        <div style="background:#fff3e0;border:1.5px solid #ff9800;border-radius:10px;padding:14px;margin-bottom:16px;font-size:14px;color:#e65100;">
+            ⚠️ This doctor is currently marked as unavailable. You may still book, and they will confirm.
+        </div>
+        {% endif %}
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div class="form-group">
+                <label>Your Name</label>
+                <input type="text" class="form-control" id="patName" value="{{ user.name }}" readonly>
+            </div>
+            <div class="form-group">
+                <label>Select Date</label>
+                <input type="date" class="form-control" id="apptDate" min="">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Select Time Slot</label>
+            <div class="time-grid" id="timeGrid">
+                <div class="time-slot" onclick="selectTime(this)">9:00 AM</div>
+                <div class="time-slot" onclick="selectTime(this)">9:30 AM</div>
+                <div class="time-slot" onclick="selectTime(this)">10:00 AM</div>
+                <div class="time-slot" onclick="selectTime(this)">10:30 AM</div>
+                <div class="time-slot" onclick="selectTime(this)">11:00 AM</div>
+                <div class="time-slot" onclick="selectTime(this)">11:30 AM</div>
+                <div class="time-slot" onclick="selectTime(this)">2:00 PM</div>
+                <div class="time-slot" onclick="selectTime(this)">2:30 PM</div>
+                <div class="time-slot" onclick="selectTime(this)">3:00 PM</div>
+                <div class="time-slot" onclick="selectTime(this)">3:30 PM</div>
+                <div class="time-slot" onclick="selectTime(this)">4:00 PM</div>
+                <div class="time-slot" onclick="selectTime(this)">4:30 PM</div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Notes / Symptoms (optional)</label>
+            <textarea class="form-control" id="apptNotes" rows="3" placeholder="Describe your symptoms or reason for visit..."></textarea>
+        </div>
+
+        <button class="book-btn" id="bookBtn" onclick="bookAppointment()">Confirm Appointment</button>
+    </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// Set min date to today
+document.getElementById('apptDate').min = new Date().toISOString().split('T')[0];
+
+let selectedTime = null;
+let selectedRating = 0;
+const DOCTOR_ID = "{{ doctor.id }}";
+
+function selectTime(el) {
+    document.querySelectorAll('.time-slot').forEach(t => t.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedTime = el.textContent;
+}
+
+// Rating stars
+document.querySelectorAll('.rate-star').forEach(star => {
+    star.addEventListener('mouseover', () => {
+        const v = parseInt(star.dataset.v);
+        document.querySelectorAll('.rate-star').forEach(s => {
+            s.classList.toggle('lit', parseInt(s.dataset.v) <= v);
+        });
+    });
+    star.addEventListener('click', () => {
+        selectedRating = parseInt(star.dataset.v);
+        document.querySelectorAll('.rate-star').forEach(s => {
+            s.classList.toggle('lit', parseInt(s.dataset.v) <= selectedRating);
+        });
+    });
+});
+document.getElementById('rateStars').addEventListener('mouseleave', () => {
+    document.querySelectorAll('.rate-star').forEach(s => {
+        s.classList.toggle('lit', parseInt(s.dataset.v) <= selectedRating);
+    });
+});
+
+function showToast(msg, color) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.background = color || '#1a1a2e';
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+async function bookAppointment() {
+    const date = document.getElementById('apptDate').value;
+    const notes = document.getElementById('apptNotes').value;
+    if (!date) { showToast('Please select a date', '#e53935'); return; }
+    if (!selectedTime) { showToast('Please select a time slot', '#e53935'); return; }
+
+    const btn = document.getElementById('bookBtn');
+    btn.disabled = true; btn.textContent = 'Booking...';
+
+    try {
+        const res = await fetch('/book_appointment', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({doctor_id: DOCTOR_ID, date, time_slot: selectedTime, notes})
+        });
+        const data = await res.json();
+        if (data.success) {
+            showToast('✅ ' + data.message, '#2e7d32');
+            btn.textContent = '✅ Appointment Booked!';
+        } else {
+            showToast(data.message || 'Something went wrong', '#e53935');
+            btn.disabled = false; btn.textContent = 'Confirm Appointment';
+        }
+    } catch (e) {
+        showToast('Error: ' + e.message, '#e53935');
+        btn.disabled = false; btn.textContent = 'Confirm Appointment';
+    }
+}
+
+async function submitRating() {
+    if (!selectedRating) { showToast('Please select a star rating', '#e53935'); return; }
+    try {
+        const res = await fetch('/rate_doctor', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({doctor_id: DOCTOR_ID, rating: selectedRating})
+        });
+        const data = await res.json();
+        if (data.success) {
+            showToast('⭐ Thanks for your rating! New rating: ' + data.new_rating, '#2e7d32');
+        }
+    } catch (e) {
+        showToast('Error submitting rating', '#e53935');
+    }
+}
+</script>
+</body>
+</html>

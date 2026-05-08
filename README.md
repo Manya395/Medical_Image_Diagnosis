@@ -48,5 +48,13 @@ pip install flask
 
  pip install flask pymongo flask-bcrypt
 
+//to install gen ai gemini api
+pip install google-generativeai
+
 //command to run the frontend
 python app/app.py
+
+//doc login
+http://127.0.0.1:5000/doctor_login
+
+//

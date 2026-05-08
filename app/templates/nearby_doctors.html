@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Nearby Doctors — EasyScan AI</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #eef5ff; min-height: 100vh; }
+.navbar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 40px; background: white;
+    box-shadow: 0px 2px 10px rgba(0,0,0,0.05);
+}
+.logo { font-size: 22px; font-weight: bold; color: #1565c0; }
+.nav-right a { margin-left: 20px; text-decoration: none; font-weight: bold; }
+.nav-back { color: #1565c0; }
+.nav-logout { color: red; }
+
+.page-header {
+    background: linear-gradient(135deg, #1565c0, #1e88e5);
+    color: white; padding: 36px 40px; text-align: center;
+}
+.page-header h1 { font-size: 28px; margin-bottom: 6px; }
+.page-header p { font-size: 14px; opacity: 0.88; }
+
+/* SEARCH BOX */
+.search-section {
+    max-width: 680px; margin: -28px auto 0; position: relative; z-index: 10; padding: 0 20px;
+}
+.search-box {
+    background: white; border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12); padding: 22px 26px;
+}
+.search-box h3 { color: #333; font-size: 15px; margin-bottom: 12px; }
+.search-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.search-input {
+    flex: 1; min-width: 180px; padding: 12px 16px; border: 2px solid #e0e0e0;
+    border-radius: 12px; font-size: 15px; outline: none; transition: border-color 0.2s;
+}
+.search-input:focus { border-color: #1565c0; }
+.search-btn {
+    padding: 12px 22px; background: #1565c0; color: white;
+    border: none; border-radius: 12px; font-size: 14px; font-weight: bold;
+    cursor: pointer; white-space: nowrap;
+}
+.search-btn:hover { background: #0d47a1; }
+.loc-btn {
+    padding: 12px 18px; background: #e8f0fe; color: #1565c0;
+    border: 2px solid #1565c0; border-radius: 12px; font-size: 14px;
+    font-weight: bold; cursor: pointer; white-space: nowrap; display: flex;
+    align-items: center; gap: 6px;
+}
+.loc-btn:hover { background: #dce8fb; }
+.loc-btn.locating { background: #fff3e0; border-color: #ff9800; color: #e65100; }
+.loc-btn.located { background: #e8f5e9; border-color: #4caf50; color: #2e7d32; }
+
+/* RESULTS */
+.results-section { max-width: 1100px; margin: 28px auto; padding: 0 20px 50px; }
+.results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 8px; }
+.results-count { font-size: 14px; color: #555; }
+.results-count strong { color: #1565c0; }
+.sort-note { font-size: 12px; color: #888; background: #f5f8ff; padding: 5px 12px; border-radius: 20px; }
+
+.doctors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: 18px;
+}
+.doctor-card {
+    background: white; border-radius: 16px;
+    box-shadow: 0 3px 14px rgba(0,0,0,0.07); overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s; cursor: pointer;
+}
+.doctor-card:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(0,0,0,0.12); }
+.doctor-card-top {
+    padding: 18px 18px 14px; border-bottom: 1px solid #f5f5f5;
+    display: flex; align-items: flex-start; gap: 12px;
+}
+.doctor-avatar {
+    width: 54px; height: 54px; border-radius: 50%;
+    background: linear-gradient(135deg, #1565c0, #1e88e5);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; color: white; flex-shrink: 0;
+}
+.doctor-info { flex: 1; min-width: 0; }
+.doctor-name { font-size: 16px; font-weight: bold; color: #1a1a2e; }
+.doctor-spec { font-size: 12px; color: #1565c0; font-weight: 600; margin-top: 3px; }
+.doctor-exp { font-size: 11px; color: #999; margin-top: 2px; }
+.availability-badge {
+    padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; white-space: nowrap; flex-shrink: 0;
+}
+.available { background: #e8f5e9; color: #2e7d32; }
+.unavailable { background: #fce4ec; color: #c62828; }
+
+.doctor-card-body { padding: 12px 18px; }
+.stars { display: flex; align-items: center; gap: 3px; margin-bottom: 8px; }
+.star { color: #ffc107; font-size: 14px; }
+.star.empty { color: #ddd; }
+.rating-text { font-size: 12px; color: #999; margin-left: 3px; }
+.info-row { display: flex; align-items: flex-start; gap: 7px; font-size: 13px; color: #555; margin-bottom: 6px; }
+.info-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+/* DISTANCE BADGE */
+.dist-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: #e8f0fe; color: #1565c0; border-radius: 20px;
+    padding: 4px 10px; font-size: 12px; font-weight: bold; margin-bottom: 8px;
+}
+.dist-badge.close { background: #e8f5e9; color: #2e7d32; }
+.dist-badge.medium { background: #fff3e0; color: #e65100; }
+.dist-badge.far { background: #fce4ec; color: #c62828; }
+
+.doctor-card-footer { padding: 10px 18px 16px; }
+.view-btn {
+    width: 100%; padding: 11px; background: #1565c0; color: white;
+    border: none; border-radius: 10px; font-size: 14px; font-weight: bold;
+    cursor: pointer; transition: background 0.2s;
+}
+.view-btn:hover { background: #0d47a1; }
+
+/* STATES */
+.empty-state { text-align: center; padding: 60px 20px; color: #888; }
+.empty-state .empty-icon { font-size: 58px; margin-bottom: 14px; }
+.empty-state h3 { font-size: 17px; margin-bottom: 6px; color: #555; }
+.loading-state { text-align: center; padding: 60px 20px; color: #1565c0; font-size: 15px; font-weight: bold; }
+.spinner {
+    width: 40px; height: 40px; border: 4px solid #dce8fb;
+    border-top: 4px solid #1565c0; border-radius: 50%;
+    animation: spin 0.8s linear infinite; margin: 0 auto 14px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div class="navbar">
+    <div class="logo">EasyScan AI</div>
+    <div class="nav-right">
+        <a href="/" class="nav-back">← Back to Scan</a>
+        <a href="/profile" class="nav-back">Profile</a>
+        <a href="/logout" class="nav-logout">Logout</a>
+    </div>
+</div>
+
+<div class="page-header">
+    <h1>🏥 Find Nearby Doctors</h1>
+    <p>Search by city or use your live location to find the closest specialists</p>
+</div>
+
+<div class="search-section">
+    <div class="search-box">
+        <h3>📍 Search by city or use your location</h3>
+        <div class="search-row">
+            <input type="text" id="cityInput" class="search-input"
+                placeholder="e.g. Bengaluru, Hubli, Mysuru..."
+                onkeypress="if(event.key==='Enter') searchByCity()">
+            <button class="search-btn" onclick="searchByCity()">Search</button>
+            <button class="loc-btn" id="locBtn" onclick="useMyLocation()">
+                <span id="locIcon">📍</span> <span id="locText">Use My Location</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="results-section">
+    <div id="resultsArea">
+        <div class="loading-state"><div class="spinner"></div>Loading doctors...</div>
+    </div>
+</div>
+
+<script>
+let userLat = null, userLng = null;
+
+function renderStars(rating) {
+    let html = '<div class="stars">';
+    for (let i = 1; i <= 5; i++) {
+        html += `<span class="star ${i <= Math.round(rating) ? '' : 'empty'}">★</span>`;
+    }
+    html += `<span class="rating-text">${rating > 0 ? rating.toFixed(1) : 'No ratings'}</span></div>`;
+    return html;
+}
+
+function distClass(km) {
+    if (km <= 3) return 'close';
+    if (km <= 10) return 'medium';
+    return 'far';
+}
+
+function renderDoctors(doctors, label, geoUsed) {
+    const area = document.getElementById('resultsArea');
+    if (!doctors.length) {
+        area.innerHTML = `<div class="empty-state">
+            <div class="empty-icon">😔</div>
+            <h3>No doctors found${label ? ' in "' + label + '"' : ''}</h3>
+            <p>No registered doctors yet in this area.</p>
+        </div>`;
+        return;
+    }
+
+    const sortNote = geoUsed
+        ? '📍 Sorted by distance from your location'
+        : '⭐ Sorted by rating';
+
+    let html = `<div class="results-header">
+        <div class="results-count">
+            ${label
+                ? `Showing <strong>${doctors.length} doctor${doctors.length > 1 ? 's' : ''}</strong> in ${label}`
+                : `Showing <strong>all ${doctors.length} registered doctor${doctors.length > 1 ? 's' : ''}</strong>`
+            }
+        </div>
+        <span class="sort-note">${sortNote}</span>
+    </div><div class="doctors-grid">`;
+
+    doctors.forEach(d => {
+        const avail = d.available
+            ? '<span class="availability-badge available">✓ Available</span>'
+            : '<span class="availability-badge unavailable">Unavailable</span>';
+
+        const distHtml = d.distance != null
+            ? `<div class="dist-badge ${distClass(d.distance)}">📍 ${d.distance} km away</div>`
+            : '';
+
+        html += `<div class="doctor-card" onclick="window.location='/doctor_profile_view/${d.id}'">
+            <div class="doctor-card-top">
+                <div class="doctor-avatar">👨‍⚕️</div>
+                <div class="doctor-info">
+                    <div class="doctor-name">Dr. ${d.name}</div>
+                    <div class="doctor-spec">${d.specialization}</div>
+                    <div class="doctor-exp">${d.experience ? d.experience + ' experience' : ''}</div>
+                </div>
+                ${avail}
+            </div>
+            <div class="doctor-card-body">
+                ${distHtml}
+                ${renderStars(d.rating)}
+                <div class="info-row"><span class="info-icon">🏥</span><span>${d.clinic}</span></div>
+                <div class="info-row"><span class="info-icon">📍</span><span>${d.address || d.city}</span></div>
+                <div class="info-row"><span class="info-icon">📞</span><span>${d.phone}</span></div>
+            </div>
+            <div class="doctor-card-footer">
+                <button class="view-btn">View Profile & Book Appointment</button>
+            </div>
+        </div>`;
+    });
+
+    html += '</div>';
+    area.innerHTML = html;
+}
+
+async function fetchDoctors(params) {
+    const qs = new URLSearchParams(params).toString();
+    const res = await fetch('/api/doctors?' + qs);
+    return await res.json();
+}
+
+async function loadAllDoctors() {
+    const area = document.getElementById('resultsArea');
+    area.innerHTML = '<div class="loading-state"><div class="spinner"></div>Loading doctors...</div>';
+    try {
+        const params = { city: 'all' };
+        if (userLat && userLng) { params.lat = userLat; params.lng = userLng; }
+        const doctors = await fetchDoctors(params);
+        renderDoctors(doctors, null, !!(userLat && userLng));
+    } catch (e) {
+        area.innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div><h3>Error loading doctors</h3><p>${e.message}</p></div>`;
+    }
+}
+
+async function searchByCity() {
+    const city = document.getElementById('cityInput').value.trim();
+    if (!city) { loadAllDoctors(); return; }
+    const area = document.getElementById('resultsArea');
+    area.innerHTML = `<div class="loading-state"><div class="spinner"></div>Searching in ${city}...</div>`;
+    try {
+        const params = { city };
+        if (userLat && userLng) { params.lat = userLat; params.lng = userLng; }
+        const doctors = await fetchDoctors(params);
+        renderDoctors(doctors, city, !!(userLat && userLng));
+    } catch (e) {
+        area.innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div><h3>Error</h3><p>${e.message}</p></div>`;
+    }
+}
+
+function useMyLocation() {
+    const btn = document.getElementById('locBtn');
+    const icon = document.getElementById('locIcon');
+    const txt = document.getElementById('locText');
+
+    if (!navigator.geolocation) {
+        alert('Geolocation is not supported by your browser. Please search by city.');
+        return;
+    }
+
+    btn.className = 'loc-btn locating';
+    icon.textContent = '⏳';
+    txt.textContent = 'Locating...';
+
+    navigator.geolocation.getCurrentPosition(
+        pos => {
+            userLat = pos.coords.latitude;
+            userLng = pos.coords.longitude;
+            btn.className = 'loc-btn located';
+            icon.textContent = '✅';
+            txt.textContent = 'Location Found';
+            // Clear city input and reload with geo
+            document.getElementById('cityInput').value = '';
+            loadAllDoctors();
+        },
+        err => {
+            btn.className = 'loc-btn';
+            icon.textContent = '📍';
+            txt.textContent = 'Use My Location';
+            if (err.code === 1) {
+                alert('Location access denied. Please allow location or search by city name.');
+            } else {
+                alert('Could not get your location. Please search by city instead.');
+            }
+        },
+        { timeout: 10000, maximumAge: 60000 }
+    );
+}
+
+// Auto-try location on page load, fall back to all doctors
+window.onload = () => {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            pos => {
+                userLat = pos.coords.latitude;
+                userLng = pos.coords.longitude;
+                const btn = document.getElementById('locBtn');
+                document.getElementById('locIcon').textContent = '✅';
+                document.getElementById('locText').textContent = 'Location Found';
+                btn.className = 'loc-btn located';
+                loadAllDoctors();
+            },
+            () => { loadAllDoctors(); }, // silently fall back
+            { timeout: 5000, maximumAge: 60000 }
+        );
+    } else {
+        loadAllDoctors();
+    }
+};
+</script>
+</body>
+</html>
